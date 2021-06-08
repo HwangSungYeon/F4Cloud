@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "lib": [
+        "dom",
+        "dom.iterable",
+        "esnext"
+      ],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "noFallthroughCasesInSwitch": true,
+      "module": "esnext",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "jsx": "react-jsx",
+      "baseUrl": "src",
+      "noImplicitAny": false,
+      "allowUnreachableCode": true,
+    },
+    "exclude": [
+      "node_modules"
+    ],
+    "include": [
+      "**/*.ts",
+      "**/*.tsx", "src/components/auth/AuthForm.js", "src/components/common/Button.js", "src/styles/GlobalStyle.js",
+    ]
+}
