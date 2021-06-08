@@ -180,13 +180,7 @@ const AuthForm = ({ type }) => {
       if (signInResult.status === 200) {
         setFlagLogin(true);
         openLoginModal();
-        setAuthTokens({
-          userId,
-          password,
-          IdToken: signInResult.data.IdToken,
-          AccessToekn: signInResult.data.AccessToken,
-          SessionToken: signInResult.data.Credentials.SessionToken,
-        });
+        setAuthTokens(signInResult.data);
       }
     }
   };

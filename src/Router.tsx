@@ -17,7 +17,7 @@ const Router: React.FC = () => {
       <Route exact path="/about" component={AboutPage} />
       <Route exact path="/service" component={ServicePage} />
       <Route exact path="/contact" component={ContactPage} />
-      <Route exact path={['/@:username/', '/']} component={UserCloudPage} />
+      <Route exact path={['/drive', '/']} component={UserCloudPage} />
       <Route path="/@:username/:cloudId" component={UserCloudPage} />
       <Route path="/">404 not found</Route>
     </Switch>
