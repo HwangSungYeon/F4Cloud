@@ -18,6 +18,13 @@ const Users = () => {
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
   const [createFolderModal, setCreateFolderModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const fileChangedHandler = (event) => {
+    const file = event.target.files;
+    console.log('ss', file);
+    setSelectedFile(file);
+  };
 
   const upload = () => setCreateFolderModal(true);
   useEffect(async () => {
@@ -35,6 +42,25 @@ const Users = () => {
     }
   }, []);
 
+  if (selectedFile) {
+    const uploadFile = async () => {
+      let uploadFileResult = null;
+      try {
+        uploadFileResult = await fileApi.uploadFile({
+          user: authTokens,
+          file: selectedFile,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log(uploadFileResult);
+        if (uploadFileResult.status === 201) {
+          console.log(uploadFileResult);
+        }
+      }
+    };
+  }
+
   return (
     <Wrapper>
       <s.UserAside>
@@ -43,7 +69,9 @@ const Users = () => {
         </s.UserWrapper>
         <s.UserWrapper>
           <s.UserContainer>
-            <button onClick={upload}>업로드</button>
+            <button onClick={upload}>폴더생성</button>
+            <input type="file" onChange={fileChangedHandler} />
+
             {createFolderModal ? (
               <CreateFolderModal
                 open={createFolderModal}
