@@ -10,6 +10,14 @@ export const UserAside = styled.section`
   align-items: felx-start;
   margin: 0;
 `;
+export const DropdownWrapper = styled.section`
+  display: flex;
+  column: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 4rem;
+`;
 export const UserWrapper = styled.section`
   display: flex;
   column: 100%;
