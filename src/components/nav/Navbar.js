@@ -74,7 +74,7 @@ const Navbar = () => {
                 </MenuLink>
               </MenuItem>
               <MenuItemBtn>
-                {button ? (
+                {
                   authTokens ? (
                     <MenuLinkBtn onClick={() => setAuthTokens(null)}>
                       <Button primary>Logout</Button>
@@ -84,13 +84,14 @@ const Navbar = () => {
                       <Button primary>Login</Button>
                     </MenuLinkBtn>
                   )
-                ) : (
-                  <MenuLinkBtn to="/login">
-                    <Button primary bigFont onClick={closeMenu}>
-                      Login
-                    </Button>
-                  </MenuLinkBtn>
-                )}
+                  // : (
+                  //   <MenuLinkBtn to="/login">
+                  //     <Button primary bigFont onClick={closeMenu}>
+                  //       Login
+                  //     </Button>
+                  //   </MenuLinkBtn>
+                  // )
+                }
               </MenuItemBtn>
               <MenuItemBtn>
                 {button ? (

@@ -5,6 +5,7 @@ import Router from './Router';
 import GlobalStyle from './styles/GlobalStyle';
 import { theme } from './styles/theme';
 import { AuthContext } from './context/auth';
+import { DriveProvider } from './context/drive';
 
 const Wrapper = styled.div``;
 
@@ -20,6 +21,7 @@ const App: React.FC = () => {
     } finally {
       if (user) {
         setToken(JSON.parse(user));
+        console.log('app token', token);
       }
     }
   }, []);
@@ -29,16 +31,18 @@ const App: React.FC = () => {
     setToken(data);
   };
 
-  console.log('token', token);
+  // localStorage.clear();
   return (
     <Wrapper>
       <AuthContext.Provider value={{ authTokens: token, setAuthTokens: setTokens }}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <BrowserRouter>
-            <Router />
-          </BrowserRouter>
-        </ThemeProvider>
+        <DriveProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <BrowserRouter>
+              <Router />
+            </BrowserRouter>
+          </ThemeProvider>
+        </DriveProvider>
       </AuthContext.Provider>
     </Wrapper>
   );

@@ -204,7 +204,7 @@ const AuthForm = ({ type }) => {
   //   }
   // }, [userId, password]);
 
-  console.log('local', localStorage.getItem('user'));
+  console.log(authTokens);
   return (
     <AuthFormWrapper>
       <h3>{text}</h3>
@@ -253,13 +253,12 @@ const AuthForm = ({ type }) => {
         )}
         {confirm ? (
           <>
-            {' '}
             <StyledInput
               onChange={onVerificationCodeChange}
               autoComplete="verificationcode"
               name="verificationcode"
               placeholder="인증번호"
-            />{' '}
+            />
             <ButtonWithMarginTOP cyan onClick={verification}>
               확인
             </ButtonWithMarginTOP>

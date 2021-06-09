@@ -33,10 +33,10 @@ export const fileApi = {
     };
     return api.post('/files', {});
   },
-  createFolder: ({ user }) => {
+  createFolder: ({ user, parent_id, user_id, newFolderName }) => {
     const headers = {
       Accept: 'application/json, text/plain, */*',
-      'Content-type': 'application/x-www-form-urlencoded',
+      'Content-type': 'application/json',
       Authorization: `${user.AccessToken}`,
       'Access-Key-Id': `${user.Credentials.AccessKeyId}`,
       'Secret-Key': `${user.Credentials.SecretKey}`,
@@ -44,13 +44,15 @@ export const fileApi = {
       'ID-Token': `${user.IdToken}`,
       'Access-Control-Allow-Origin': true,
     };
-    // {
-    //   “parent_id”: 27,
-    //   “user_id”: “test”,
-    //   “name”: “folder_12”,
-    //   “path”: “folder_2/”,
-    //   }
-
-    return api.post('/folders');
+    return api.post(
+      '/folders/',
+      {
+        parent_id: Number(parent_id),
+        user_id: user_id,
+        name: newFolderName,
+        path: `${parent_id}/`,
+      },
+      { headers },
+    );
   },
 };
