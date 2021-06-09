@@ -20,7 +20,7 @@ export const UserWrapper = styled.section`
 `;
 export const UserContainer = styled(Container)`
   display: flex;
-  /* flex-direction: width; */
+  flex-direction: width;
   ${Container};
 `;
 export const UserTitle = styled.h3`

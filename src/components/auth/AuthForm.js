@@ -186,25 +186,6 @@ const AuthForm = ({ type }) => {
   };
 
   const text = textMap[type];
-  if (flagVerificate) {
-    return (
-      <React.Fragment>
-        <RegisterModal open={registerModalOpen} close={closeRegisterModal} header="환영합니다!">
-          성공적으로 회원가입이 되었습니다.
-        </RegisterModal>
-      </React.Fragment>
-    );
-  }
-
-  if (flagLogin) {
-    return (
-      <React.Fragment>
-        <LoginModal open={loginModalOpen} close={closeLoginModal} header="환영합니다!">
-          로그인 되었습니다.
-        </LoginModal>
-      </React.Fragment>
-    );
-  }
 
   // useEffect(() => {
   //   if (userId && password) {
@@ -228,6 +209,16 @@ const AuthForm = ({ type }) => {
     <AuthFormWrapper>
       <h3>{text}</h3>
       <form>
+        {flagVerificate ? (
+          <RegisterModal open={registerModalOpen} close={closeRegisterModal} header="환영합니다!">
+            성공적으로 회원가입이 되었습니다.
+          </RegisterModal>
+        ) : null}
+        {flagLogin ? (
+          <LoginModal open={loginModalOpen} close={closeLoginModal} header="환영합니다!">
+            로그인 되었습니다.
+          </LoginModal>
+        ) : null}
         <StyledInput
           onChange={onUserIdChange}
           autoComplete="username"

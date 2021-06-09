@@ -1,22 +1,12 @@
 import styled from 'styled-components';
-import {
-  ProSidebar,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarContent,
-  Menu,
-  MenuItem,
-  SubMenu,
-} from 'react-pro-sidebar';
-import { OutlineButton } from '../../styles/GlobalStyle';
 import AsideNavbar from '../../components/asidenav/AsideNavbar';
 import React, { useEffect, useState } from 'react';
-import useDropdownMenu from 'react-accessible-dropdown-menu-hook';
 import 'react-pro-sidebar/dist/css/styles.css';
 import DataTable from 'components/content/DataTable';
 import { fileApi } from 'api/api-file';
 import * as s from './user.styles';
 import { useAuth } from 'context/auth';
+import CreateFolderModal from '../modal/CreateFolderModaal';
 const Wrapper = styled.div`
   display: flex;
   position: sticky;
@@ -27,6 +17,9 @@ const Users = () => {
   const { authTokens } = useAuth();
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
+  const [createFolderModal, setCreateFolderModal] = useState(false);
+
+  const upload = () => setCreateFolderModal(true);
   useEffect(async () => {
     let result = null;
     try {
@@ -41,6 +34,7 @@ const Users = () => {
       }
     }
   }, []);
+
   return (
     <Wrapper>
       <s.UserAside>
@@ -49,6 +43,16 @@ const Users = () => {
         </s.UserWrapper>
         <s.UserWrapper>
           <s.UserContainer>
+            <button onClick={upload}>업로드</button>
+            {createFolderModal ? (
+              <CreateFolderModal
+                open={createFolderModal}
+                close={() => setCreateFolderModal(false)}
+                header="폴더 생성"
+              >
+                <input type="text" placeholder="폴더명" />
+              </CreateFolderModal>
+            ) : null}
             <s.UserTitle>내 드라이브</s.UserTitle>
             <s.UserSearchForm>
               <s.UserSearchInput

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/Modal.css';
 
-const LoginModal = (props) => {
+const CreateFolderModal = (props) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
   const { open, close, header } = props;
 
@@ -14,17 +14,16 @@ const LoginModal = (props) => {
           <header>
             {header}
             <button className="close" onClick={close}>
-              {' '}
-              &times;{' '}
+              &times;
             </button>
           </header>
           <main>{props.children}</main>
           <footer>
-            <Link to="/">
-              <button className="close" onClick={close}>
-                확인
-              </button>
-            </Link>
+            {/* <Link to="/"> */}
+            <button className="close" onClick={close}>
+              생성
+            </button>
+            {/* </Link> */}
           </footer>
         </section>
       ) : null}
@@ -32,4 +31,4 @@ const LoginModal = (props) => {
   );
 };
 
-export default LoginModal;
+export default CreateFolderModal;
