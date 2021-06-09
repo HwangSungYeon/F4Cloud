@@ -186,8 +186,6 @@ const AuthForm = ({ type }) => {
   };
 
   const text = textMap[type];
-  console.log('result', userId, password, confirmPassword, email, text);
-
   if (flagVerificate) {
     return (
       <React.Fragment>

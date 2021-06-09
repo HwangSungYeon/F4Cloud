@@ -1,17 +1,36 @@
-import api from './api-base';
+import api from './api-folderbase';
 
 export const fileApi = {
-  loadFiles: ({ data }) => {
-    console.log('data', data);
+  // 사용자의 폴더 및 파일 불러오기
+  loadFiles: ({ user }) => {
     const headers = {
+      Accept: 'application/json, text/plain, */*',
       'Content-type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${data.AccessToken}`,
-      'Access-Key-Id': `${data.Credentials.AccessKeyId}`,
-      'Secret-Key': `${data.Credentials.SecretKey}`,
-      'Session-Token': `${data.Credentials.SessionToken}`,
-      'ID-Token': `${data.IdToken}`,
-      user_id: `${data.User.id}`,
+      Authorization: `${user.AccessToken}`,
+      'Access-Key-Id': `${user.Credentials.AccessKeyId}`,
+      'Secret-Key': `${user.Credentials.SecretKey}`,
+      'Session-Token': `${user.Credentials.SessionToken}`,
+      'ID-Token': `${user.IdToken}`,
+      'Access-Control-Allow-Origin': true,
     };
-    return api.get(`/folders/${data.User.root_id}/list`, { headers });
+    return api.get(`/folders/${user.User.root_id}/list`, {
+      headers,
+      params: {
+        user_id: user.User.id,
+      },
+    });
+  },
+  uploadFile: ({ user }) => {
+    const headers = {
+      Accept: 'application/json, text/plain, */*',
+      'Content-type': 'application/x-www-form-urlencoded',
+      Authorization: `${user.AccessToken}`,
+      'Access-Key-Id': `${user.Credentials.AccessKeyId}`,
+      'Secret-Key': `${user.Credentials.SecretKey}`,
+      'Session-Token': `${user.Credentials.SessionToken}`,
+      'ID-Token': `${user.IdToken}`,
+      'Access-Control-Allow-Origin': true,
+    };
+    return api.post('/files', {});
   },
 };

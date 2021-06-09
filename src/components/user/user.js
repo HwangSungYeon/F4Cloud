@@ -10,54 +10,12 @@ import {
 } from 'react-pro-sidebar';
 import { OutlineButton } from '../../styles/GlobalStyle';
 import AsideNavbar from '../../components/asidenav/AsideNavbar';
-import DropdownMenu from '../../components/dropdownMenu/DropdownMenu';
-import React, { handleClick, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook';
 import 'react-pro-sidebar/dist/css/styles.css';
-import TitleImg from '../../images/title-search.jpeg';
-import HashtagImg from '../../images/hashtag-search.jpeg';
-import HumanImg from '../../images/human-search.jpeg';
-import CloudImg from '../../images/cloud-computing.jpeg';
-import GroupImg from '../../images/group.jpeg';
 import DataTable from 'components/content/DataTable';
 import { fileApi } from 'api/api-file';
-import {
-  UserContainer,
-  UserWrapper,
-  UserAside,
-  UserSearchForm,
-  UserTitle,
-  UserSearchInput,
-  UserSearchBtn,
-  UserSubTitle,
-  UserContentContainer,
-  UserTabContainer,
-  UserBtn,
-  UserCardWrapper,
-  UserFeature,
-  UserFeatureContent,
-  UserFeatureTitle,
-  UserFeatureText,
-  UserFeatureDetails,
-  UserFeatureItem,
-  UserItemTitle,
-  UserItemContent,
-  UserItemIcon,
-  UserItemText,
-  UserCardSection,
-  UserSmallCards,
-  UserCard,
-  UserCardContent,
-  UserCardHeading,
-  UserCardDetails,
-  UserCardItems,
-  UserCardTitle,
-  UserCardItem,
-  UserCardIcon,
-  UserCardText,
-  UserImg,
-  Img,
-} from './user.styles';
+import * as s from './user.styles';
 import { useAuth } from 'context/auth';
 const Wrapper = styled.div`
   display: flex;
@@ -67,40 +25,48 @@ const Wrapper = styled.div`
 `;
 const Users = () => {
   const { authTokens } = useAuth();
+  const [folders, setFolders] = useState([]);
+  const [files, setFiles] = useState([]);
   useEffect(async () => {
+    let result = null;
     try {
-      let files = await fileApi.loadFiles({ data: authTokens });
-      console.log('files', files);
+      result = await fileApi.loadFiles({ user: authTokens });
     } catch (error) {
       console.log(error);
+    } finally {
+      if (result && result.status === 202) {
+        console.log('result', result.data);
+        setFolders(result.data.folders);
+        setFiles(result.data.files);
+      }
     }
   }, []);
   return (
     <Wrapper>
-      <UserAside>
-        <UserWrapper>
+      <s.UserAside>
+        <s.UserWrapper>
           <AsideNavbar />
-        </UserWrapper>
-        <UserWrapper>
-          <UserContainer>
-            <UserTitle>내 드라이브</UserTitle>
-            <UserSearchForm>
-              <UserSearchInput
+        </s.UserWrapper>
+        <s.UserWrapper>
+          <s.UserContainer>
+            <s.UserTitle>내 드라이브</s.UserTitle>
+            <s.UserSearchForm>
+              <s.UserSearchInput
                 name="search"
                 id="search"
                 type="search"
                 placeholder="드라이브에서 검색"
               />
-              <UserSearchBtn>Submit</UserSearchBtn>
-            </UserSearchForm>
-          </UserContainer>
-          <DataTable />
+              <s.UserSearchBtn>Submit</s.UserSearchBtn>
+            </s.UserSearchForm>
+          </s.UserContainer>
+          <DataTable folders={folders} files={files} />
 
-          <UserWrapper>
-            <UserContainer>{/* <UserSubTitle>클라우드 자료</UserSubTitle> */}</UserContainer>
-          </UserWrapper>
-        </UserWrapper>
-      </UserAside>
+          <s.UserWrapper>
+            <s.UserContainer>{/* <UserSubTitle>클라우드 자료</UserSubTitle> */}</s.UserContainer>
+          </s.UserWrapper>
+        </s.UserWrapper>
+      </s.UserAside>
     </Wrapper>
   );
 };

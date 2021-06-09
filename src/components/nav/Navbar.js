@@ -36,7 +36,6 @@ const Navbar = () => {
 
   const { authTokens, setAuthTokens } = useAuth();
 
-  console.log('dd', authTokens);
   return (
     <div>
       <IconContext.Provider value={{ color: '#fff' }}>

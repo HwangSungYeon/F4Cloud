@@ -19,7 +19,7 @@ const App: React.FC = () => {
       console.log(error);
     } finally {
       if (user) {
-        setToken(user);
+        setToken(JSON.parse(user));
       }
     }
   }, []);
