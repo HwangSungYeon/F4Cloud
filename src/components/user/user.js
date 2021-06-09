@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import 'react-pro-sidebar/dist/css/styles.css';
 import DataTable from 'components/content/DataTable';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { Dropdown, DropdownButton, SplitButton, ButtonGroup, ListGroup } from 'react-bootstrap';
-import Card from '../../components/card/card';
 import * as s from './user.styles';
 import { useAuth } from 'context/auth';
+import { useDrive } from 'context/drive';
+import { fileApi } from 'api/api-file';
 import CreateFolderModal from '../modal/CreateFolderModal';
 const Wrapper = styled.div`
   display: flex;
@@ -15,57 +15,87 @@ const Wrapper = styled.div`
   flex-direction: column;
   column: 100%;
 `;
-function alertClicked() {
-  alert('You clicked the third ListGroupItem');
-}
 const Users = () => {
   const { authTokens } = useAuth();
+  const { drive, setDrive } = useDrive();
+
   // 현재 위치의 폴더 id
   const [currentFolder, setCurrentFolder] = useState(authTokens.User.root_id);
   const [newFolderName, setNewFolderName] = useState(null);
   const [createFolderModal, setCreateFolderModal] = useState(false);
+  const [createFileModal, setCreateFileModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const fileChangedHandler = (event) => {
+    const file = event.target.files;
+    console.log('ss', file);
+    setSelectedFile(file);
+  };
 
   const create = () => setCreateFolderModal(true);
-  console.log(currentFolder, 'currentFolder');
+  const createFolder = async () => {
+    let result = null;
+    try {
+      result = await fileApi.createFolder({
+        user: authTokens,
+        parent_id: currentFolder,
+        user_id: authTokens.User.id,
+        newFolderName,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log(result.data);
+      setDrive([...drive, { id: drive.length, ...result.data }]);
+    }
+  };
+
+  const createFile = async () => {
+    console.log('craetefile');
+    let result = null;
+    try {
+      result = await fileApi.uploadFile({
+        user: authTokens,
+        file: selectedFile,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (result) {
+        console.log('file result', result);
+      }
+    }
+  };
+
   return (
     <Wrapper>
       <s.UserAside>
         <s.UserWrapper>
-          <s.DropdownWrapper>
-            <div className="mb-2">
-              {[DropdownButton].map((DropdownType, variant) => (
-                <DropdownType
-                  as={ButtonGroup}
-                  key={variant}
-                  menuAlign={{ lg: 'left' }}
-                  id={`dropdown-variants-${variant}`}
-                  variant="secondary"
-                  size="lg"
-                  title="새로 만들기"
-                >
-                  <Dropdown.Item eventKey="1">폴더 생성</Dropdown.Item>
-                  <Dropdown.Item eventKey="2">파일 업로드</Dropdown.Item>
-                  {/* <Dropdown.Divider />
-                <Dropdown.Item eventKey="4">대시</Dropdown.Item> */}
-                </DropdownType>
-              ))}
-            </div>
-          </s.DropdownWrapper>
-
           <AsideNavbar />
         </s.UserWrapper>
         <s.UserWrapper>
           <s.UserContainer>
-            <button>파일 업로드</button>
             <button onClick={create}>폴더생성</button>
+            <button onClick={() => setCreateFileModal(true)}>파일업로드</button>
+
+            {createFileModal ? (
+              <CreateFolderModal
+                open={createFileModal}
+                close={() => setCreateFileModal(false)}
+                header="파일 생성"
+                buttonText={'업로드'}
+                onClick={createFile}
+              >
+                <input type="file" onChange={fileChangedHandler} />
+              </CreateFolderModal>
+            ) : null}
             {createFolderModal ? (
               <CreateFolderModal
                 open={createFolderModal}
                 close={() => setCreateFolderModal(false)}
                 header="폴더 생성"
-                parent_id={currentFolder}
-                user_id={authTokens.User.id}
-                newFolderName={newFolderName}
+                buttonText={'생성'}
+                onClick={createFolder}
               >
                 <input
                   type="text"
@@ -82,7 +112,7 @@ const Users = () => {
                 type="search"
                 placeholder="드라이브에서 검색"
               />
-              <s.UserSearchBtn>Submit</s.UserSearchBtn>
+              <s.UserSearchBtn>검색</s.UserSearchBtn>
             </s.UserSearchForm>
           </s.UserContainer>
           <DataTable />

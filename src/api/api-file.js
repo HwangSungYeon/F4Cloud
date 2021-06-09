@@ -20,10 +20,10 @@ export const fileApi = {
       },
     });
   },
-  uploadFile: ({ user }) => {
+  uploadFile: ({ user, file }) => {
     const headers = {
       Accept: 'application/json, text/plain, */*',
-      'Content-type': 'application/x-www-form-urlencoded',
+      'Content-type': 'multipart/form-data; boundary={Boundary}',
       Authorization: `${user.AccessToken}`,
       'Access-Key-Id': `${user.Credentials.AccessKeyId}`,
       'Secret-Key': `${user.Credentials.SecretKey}`,
@@ -31,7 +31,18 @@ export const fileApi = {
       'ID-Token': `${user.IdToken}`,
       'Access-Control-Allow-Origin': true,
     };
-    return api.post('/files', {});
+
+    const formData = new FormData();
+    formData.append('file', file[0]);
+    formData.append('user_id', user.User.id);
+    formData.append('folder_id', Number(user.User.root_id));
+    formData.append('path', `${user.User.root_id}/`); // 수정사항
+    formData.append('file', file[0].name);
+    formData.append('size', file[0].size);
+
+    console.log('fd', formData, user, file[0]);
+
+    return api.post('/files/', formData, { headers });
   },
   createFolder: ({ user, parent_id, user_id, newFolderName }) => {
     const headers = {
